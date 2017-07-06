@@ -1,6 +1,7 @@
 require 'dwolla_v2'
 require 'dotenv'
 require 'json'
+require 'pp'
 Dotenv.load
 
 app_key = ENV['APP_KEY']
@@ -21,13 +22,16 @@ token = $dwolla.auths.client
 
 # new_customer = token.post "customers", request_body
 # # p new_customer.headers[:location]
+# pp token.get("https://api-uat.dwolla.com/customers/8596a99d-2b7b-4f2a-9292-d7b26b3a2351")['_links']
+pp token.get("https://api-uat.dwolla.com/customers/8596a99d-2b7b-4f2a-9292-d7b26b3a2351/funding-sources")
 
+# pp token.get("customers", limit: 10)["_embedded"]
 # customer_url = token.get("customers", limit: 10)["_embedded"]["customers"][0]["_links"]["self"]["href"]
 # customer_url = "https://api-uat.dwolla.com/customers/8596a99d-2b7b-4f2a-9292-d7b26b3a2351"
 
 # customer = token.post "#{customer_url}/iav-token"
 # p customer.token
 
-iav_token = "PXJsdPTbNR9510hHNRFfTuKbdip2clxxD2cyFJ7QBhkhDHXmMB"
+# iav_token = "PXJsdPTbNR9510hHNRFfTuKbdip2clxxD2cyFJ7QBhkhDHXmMB"
 
 
