@@ -1,0 +1,9 @@
+.container {
+  margin: 5px;
+  padding: 15px;
+  border: 1px solid black;
+}
+
+.container form * {
+  display: block;
+}

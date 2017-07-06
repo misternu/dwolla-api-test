@@ -1,0 +1,4 @@
+Make 10 fake users
+
+2 to recieve, 8 to send
+
