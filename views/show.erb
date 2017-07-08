@@ -1,0 +1,45 @@
+<div class="container">
+  <div>
+    Name: <%= customer[:first_name] %> <%= customer[:last_name] %>
+  </div>
+  <div>
+    Email: <%= customer[:email]%>
+  </div>
+  <div>
+    Status: <%= customer[:status] %>
+  </div>
+</div>
+<div class="container">
+  <h4>Funding Sources:</h4>
+  <% funding_sources.each do |source| %>
+    <div><%= source[:id] %></div>
+    <div><%= source[:status] %></div>
+  <% end %>
+  <input class="iav" type="button" id="start" value="Add Funding Source" data-id="<%= customer[:id] %>">
+</div>
+<div class="container" id="iavContainer" hidden>
+</div>
+
+<script type="text/javascript">
+  $(() => {
+    $('.iav').on('click', (event) => {
+      event.preventDefault()
+      $('#iavContainer').toggle()
+      let userID = $(event.target).data('id')
+      $.ajax('/customers/' + userID + '/iav-token')
+      .done(iavToken => {
+        dwolla.configure('sandbox');
+        dwolla.iav.start(iavToken, {
+          container: 'iavContainer',
+          stylesheets: [
+            'https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext'
+          ],
+          microDeposits: 'true',
+          fallbackToMicroDeposits: 'true'
+        }, function(err, res) {
+          console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
+        })
+      })
+    })
+  })
+</script>

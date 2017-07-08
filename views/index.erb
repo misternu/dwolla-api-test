@@ -1,6 +1,8 @@
 <div class="container">
   <h3>Customers:</h3>
-  <%= customers %>
+  <% customers.each do |customer| %>
+    <%= erb :customer, locals: {customer: customer} %>
+  <% end %>
 </div>
 <div class="container">
   <form action="/customers" method="post">
@@ -15,30 +17,3 @@
     <input type="submit">
   </form>
 </div>
-
-<div class="container" id="iavContainer">
-
-</div>
-
-<script type="text/javascript">
-  $(() => {
-    $('.iav').on('click', (event) => {
-      event.preventDefault()
-      let userID = $(event.target).data('id')
-      $.ajax('/customers/' + userID + '/iav-token')
-      .done(iavToken => {
-        dwolla.configure('sandbox');
-        dwolla.iav.start(iavToken, {
-          container: 'iavContainer',
-          stylesheets: [
-            'https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext'
-          ],
-          microDeposits: 'true',
-          fallbackToMicroDeposits: 'true'
-        }, function(err, res) {
-          console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
-        })
-      })
-    })
-  })
-</script>
