@@ -22,19 +22,24 @@ end
 Token.fresh($dwolla)
 
 get '/' do
-  p token = Token.fresh($dwolla)
+  token = Token.fresh($dwolla)
   customers_response = token.get("customers", limit: 20)["_embedded"]['customers']
+  pp customers_response
+  pp customers_response
   customers = customers_response.map do |customer_data|
+    id = customer_data.fetch('id')
     first_name = customer_data.fetch('firstName', 'Firstname')
     last_name = customer_data.fetch('lastName', 'Lastname')
     email = customer_data.fetch('email', 'email')
     status = customer_data.fetch('status', 'status')
-    "Name: #{first_name} #{last_name} Email:#{email} Status: #{status}"
+    <<~CUSTOMER
+      <div>
+        ID: #{id} Name: #{first_name} #{last_name} Email:#{email} Status: #{status}
+        <a class="iav" data-id="#{id}" href="#">IAV</a>
+      </div>
+    CUSTOMER
   end
-  customers = customers.map do |customer|
-    "<div>#{customer}</div>"
-  end .join
-  erb :index, locals: {customers: customers}
+  erb :index, locals: {customers: customers.join}
 end
 
 post '/customers' do
@@ -50,7 +55,8 @@ post '/customers' do
   redirect to('/')
 end
 
-get '/test' do
-  p Token.fresh($dwolla)
-  'running'
+get '/customers/:id/iav-token' do
+  token = Token.fresh($dwolla)
+  request = 'https://api-uat.dwolla.com/customers/' + params[:id] + '/iav-token'
+  p iav_token = token.post(request).token
 end
