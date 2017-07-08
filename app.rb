@@ -2,6 +2,7 @@ require 'dwolla_v2'
 require 'dotenv'
 require 'json'
 require 'pp'
+
 Dotenv.load
 
 app_key = ENV['APP_KEY']
